@@ -55,6 +55,17 @@ const base = import.meta.env.BASE_URL;
         </button>
       </div>
 
+      <!-- Pause between cycles toggle -->
+      <label class="flex items-center justify-between w-full px-1">
+        <span class="text-sm font-medium text-andes-navy">Pausa 10s entre ciclos</span>
+        <input type="checkbox" id="pause-toggle" checked
+          class="w-11 h-6 appearance-none bg-gray-300 rounded-full relative cursor-pointer
+                 checked:bg-andes-red transition-colors
+                 after:content-[''] after:absolute after:top-0.5 after:left-0.5
+                 after:w-5 after:h-5 after:bg-white after:rounded-full after:transition-transform
+                 checked:after:translate-x-5" />
+      </label>
+
       <!-- Controls -->
       <div class="flex gap-4 w-full">
         <button
@@ -98,10 +109,13 @@ const base = import.meta.env.BASE_URL;
     const roundCount = document.getElementById('round-count')!;
     const totalTime = document.getElementById('total-time')!;
     const durationBtns = document.querySelectorAll('.duration-btn');
+    const pauseToggle = document.getElementById('pause-toggle') as HTMLInputElement;
 
     let duration = 120;
     let remaining = 120;
     let isRunning = false;
+    let isPausing = false;
+    let pauseRemaining = 10;
     let intervalId: number | null = null;
     let rounds = 0;
     let totalSeconds = 0;
@@ -152,26 +166,69 @@ const base = import.meta.env.BASE_URL;
       }
 
       if (remaining <= 0) {
-        // Round complete
         beep(1200, 0.5);
         setTimeout(() => beep(1200, 0.5), 600);
         setTimeout(() => beep(1200, 0.5), 1200);
 
         rounds++;
         roundCount.textContent = String(rounds);
-        timerLabel.textContent = `¡Ronda ${rounds} completada!`;
 
         if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 200]);
 
-        stop();
-        remaining = duration;
-        updateDisplay();
+        if (intervalId) clearInterval(intervalId);
+        intervalId = null;
+
+        if (pauseToggle.checked) {
+          startPause();
+        } else {
+          remaining = duration;
+          timerLabel.textContent = `¡Ronda ${rounds} completada!`;
+          updateDisplay();
+          intervalId = window.setInterval(tick, 1000);
+        }
       }
     }
 
+    function startPause() {
+      isPausing = true;
+      pauseRemaining = 10;
+      timerLabel.textContent = `Ronda ${rounds} completada — Pausa`;
+      timerDisplay.textContent = String(pauseRemaining);
+      timerRing.setAttribute('stroke', '#A8DADC');
+      timerRing.setAttribute('stroke-dashoffset', '0');
+      btnStart.textContent = 'SALTAR';
+
+      intervalId = window.setInterval(() => {
+        pauseRemaining--;
+        timerDisplay.textContent = String(pauseRemaining);
+        timerRing.setAttribute('stroke-dashoffset', String(circumference * (1 - pauseRemaining / 10)));
+
+        if (pauseRemaining <= 3 && pauseRemaining > 0) beep(600, 0.1);
+
+        if (pauseRemaining <= 0) {
+          endPause();
+        }
+      }, 1000);
+    }
+
+    function endPause() {
+      isPausing = false;
+      if (intervalId) clearInterval(intervalId);
+      remaining = duration;
+      updateDisplay();
+      timerLabel.textContent = 'Compresiones en curso...';
+      btnStart.textContent = 'PAUSA';
+      beep(1000, 0.2);
+      intervalId = window.setInterval(tick, 1000);
+    }
+
     function start() {
+      if (isPausing) {
+        endPause();
+        return;
+      }
+
       if (isRunning) {
-        // Pause
         isRunning = false;
         if (intervalId) clearInterval(intervalId);
         if (totalIntervalId) clearInterval(totalIntervalId);
@@ -192,6 +249,7 @@ const base = import.meta.env.BASE_URL;
 
     function stop() {
       isRunning = false;
+      isPausing = false;
       if (intervalId) clearInterval(intervalId);
       if (totalIntervalId) clearInterval(totalIntervalId);
       btnStart.textContent = 'INICIAR';
