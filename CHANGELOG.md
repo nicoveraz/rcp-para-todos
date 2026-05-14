@@ -20,6 +20,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 - Metrónomo y Timer pueden correr simultáneamente al cambiar de tab (indicador ● en tab inactivo)
 - Guía DEA paso 6: frecuencia de compresiones actualizada a 110/min
 - FAQ movido de Guía DEA a página independiente
+- Ícono paso 2 "Comprobar respuesta" reemplazado por Material Symbols "communication"
 
 ### Corregido
 
