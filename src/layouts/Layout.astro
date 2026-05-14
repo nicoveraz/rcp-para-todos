@@ -22,6 +22,66 @@ const base = import.meta.env.BASE_URL;
     <title>{title}</title>
   </head>
   <body class="min-h-dvh">
+    <!-- Splash / Terms -->
+    <div id="splash" class="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center px-6 transition-opacity duration-300">
+      <div class="max-w-md w-full flex flex-col items-center text-center">
+        <img src={`${base}logo-icon.png`} alt="Andes Salud" class="w-24 h-24 rounded-2xl mb-4" />
+        <h1 class="text-2xl font-extrabold text-andes-navy leading-tight">
+          Reanimación<br>Cardio-Pulmonar
+        </h1>
+        <p class="text-andes-red font-bold text-lg mt-1">(RCP) para Tod@s</p>
+        <img src={`${base}logo-andes-salud.png`} alt="Andes Salud" class="h-8 mt-3 mb-6" />
+
+        <div class="w-full bg-gray-50 rounded-2xl p-5 text-left mb-6 border border-gray-200">
+          <h2 class="font-bold text-andes-navy text-sm mb-3">Términos y Condiciones</h2>
+          <ul class="space-y-2 text-xs text-gray-600 leading-relaxed">
+            <li class="flex gap-2">
+              <span class="text-andes-red font-bold mt-0.5">1.</span>
+              <span>Esta aplicación es de <strong class="text-andes-navy">uso exclusivamente educativo</strong> y no reemplaza la capacitación presencial ni el criterio médico profesional.</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-andes-red font-bold mt-0.5">2.</span>
+              <span>Diseñada únicamente para las <strong class="text-andes-navy">capacitaciones de RCP del Servicio de Urgencia de Andes Salud</strong>.</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-andes-red font-bold mt-0.5">3.</span>
+              <span>El contenido está basado en las guías AHA 2025 y adaptado para personal no sanitario (adultos).</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-andes-red font-bold mt-0.5">4.</span>
+              <span>Andes Salud no se hace responsable del uso de esta herramienta fuera del contexto de sus talleres oficiales.</span>
+            </li>
+          </ul>
+        </div>
+
+        <button
+          id="btn-accept"
+          class="w-full py-4 bg-andes-red text-white font-bold rounded-2xl text-lg
+                 shadow-lg shadow-andes-red/25 active:scale-95 transition-transform"
+        >
+          Acepto las condiciones
+        </button>
+        <p class="text-[10px] text-gray-400 mt-3">Servicio de Urgencia — Andes Salud Puerto Montt</p>
+      </div>
+    </div>
+
     <slot />
+
+    <script>
+      const splash = document.getElementById('splash')!;
+      const btnAccept = document.getElementById('btn-accept')!;
+
+      if (localStorage.getItem('rcp-terms-accepted')) {
+        splash.remove();
+      } else {
+        document.body.style.overflow = 'hidden';
+        btnAccept.addEventListener('click', () => {
+          localStorage.setItem('rcp-terms-accepted', '1');
+          splash.style.opacity = '0';
+          document.body.style.overflow = '';
+          setTimeout(() => splash.remove(), 300);
+        });
+      }
+    </script>
   </body>
 </html>
