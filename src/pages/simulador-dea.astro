@@ -1,0 +1,337 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Simulador DEA">
+  <main class="min-h-dvh px-5 py-6 max-w-md mx-auto flex flex-col">
+    <a href="/" class="nav-back">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Volver
+    </a>
+
+    <h1 class="text-2xl font-extrabold text-andes-navy mt-2 mb-2">Simulador DEA</h1>
+    <p class="text-sm text-gray-500 mb-4">Practica el uso del desfibrilador</p>
+
+    <!-- DEA Device UI -->
+    <div id="dea-device" class="flex-1 flex flex-col">
+      <!-- Screen -->
+      <div class="bg-andes-dark rounded-3xl p-5 shadow-2xl border-2 border-gray-700 relative overflow-hidden">
+        <!-- Status LED -->
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <div id="led" class="w-3 h-3 rounded-full bg-gray-600 transition-colors"></div>
+            <span id="led-label" class="text-xs text-gray-500 font-mono">APAGADO</span>
+          </div>
+          <span class="text-xs text-gray-600 font-mono">DEA TRAINER</span>
+        </div>
+
+        <!-- Main display -->
+        <div id="dea-screen" class="bg-gray-900 rounded-2xl p-6 min-h-[160px] flex items-center justify-center border border-gray-700">
+          <p id="screen-text" class="text-green-400 font-mono text-center text-sm leading-relaxed">
+            Presione el botón de encendido para comenzar
+          </p>
+        </div>
+
+        <!-- Visual indicator -->
+        <div id="visual-indicator" class="mt-4 hidden">
+          <div class="flex items-center justify-center gap-3">
+            <div id="indicator-icon" class="text-4xl">🫀</div>
+            <div id="indicator-bar" class="flex-1 h-2 bg-gray-700 rounded-full overflow-hidden">
+              <div id="indicator-progress" class="h-full bg-green-400 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEA Buttons -->
+      <div class="mt-6 space-y-4">
+        <!-- Power button -->
+        <button
+          id="btn-power"
+          class="w-full py-4 px-6 bg-green-600 text-white font-bold rounded-2xl
+                 flex items-center justify-center gap-3 text-lg
+                 shadow-lg shadow-green-600/30 active:scale-95 transition-transform"
+        >
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 2v6M18.36 6.64A9 9 0 115.64 6.64" stroke-linecap="round"/>
+          </svg>
+          ENCENDER
+        </button>
+
+        <!-- Pads button -->
+        <button
+          id="btn-pads"
+          disabled
+          class="w-full py-4 px-6 bg-blue-600 text-white font-bold rounded-2xl
+                 flex items-center justify-center gap-3 text-lg
+                 shadow-lg shadow-blue-600/30 active:scale-95 transition-transform
+                 disabled:opacity-40 disabled:active:scale-100"
+        >
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <rect x="4" y="4" width="16" height="16" rx="3"/>
+            <path d="M9 9h6M12 9v6" stroke-linecap="round"/>
+          </svg>
+          PARCHES CONECTADOS
+        </button>
+
+        <!-- Shock button -->
+        <button
+          id="btn-shock"
+          disabled
+          class="w-full py-5 px-6 bg-andes-red text-white font-extrabold rounded-2xl
+                 flex items-center justify-center gap-3 text-xl
+                 shadow-lg shadow-andes-red/30 active:scale-95 transition-transform
+                 disabled:opacity-40 disabled:active:scale-100
+                 relative overflow-hidden"
+        >
+          <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span id="shock-text">DESCARGA</span>
+        </button>
+
+        <!-- Compressions button -->
+        <button
+          id="btn-compressions"
+          disabled
+          class="w-full py-4 px-6 bg-andes-navy text-white font-bold rounded-2xl
+                 flex items-center justify-center gap-3 text-lg
+                 shadow-lg shadow-andes-navy/30 active:scale-95 transition-transform
+                 disabled:opacity-40 disabled:active:scale-100"
+        >
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M12 21C12 21 4 14 4 9.5C4 5.36 7.58 3 10 3c1.5 0 2 .5 2 .5S12.5 3 14 3c2.42 0 6 2.36 6 6.5C20 14 12 21 12 21z"/>
+          </svg>
+          INICIAR COMPRESIONES
+        </button>
+
+        <!-- Reset -->
+        <button
+          id="btn-reset"
+          class="w-full py-3 text-gray-400 font-medium text-sm underline hidden"
+        >
+          Reiniciar simulación
+        </button>
+      </div>
+
+      <!-- Scenario selector -->
+      <div class="mt-6 p-4 bg-gray-50 rounded-2xl">
+        <p class="text-xs font-semibold text-gray-500 mb-2">ESCENARIO</p>
+        <div class="flex gap-2">
+          <button id="scenario-shock" class="flex-1 py-2 px-3 bg-andes-red text-white text-sm font-semibold rounded-xl">
+            Desfibrilable
+          </button>
+          <button id="scenario-noshock" class="flex-1 py-2 px-3 bg-gray-200 text-gray-600 text-sm font-semibold rounded-xl">
+            No desfibrilable
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const screenText = document.getElementById('screen-text')!;
+    const led = document.getElementById('led')!;
+    const ledLabel = document.getElementById('led-label')!;
+    const visualIndicator = document.getElementById('visual-indicator')!;
+    const indicatorProgress = document.getElementById('indicator-progress')!;
+    const indicatorIcon = document.getElementById('indicator-icon')!;
+
+    const btnPower = document.getElementById('btn-power') as HTMLButtonElement;
+    const btnPads = document.getElementById('btn-pads') as HTMLButtonElement;
+    const btnShock = document.getElementById('btn-shock') as HTMLButtonElement;
+    const btnCompressions = document.getElementById('btn-compressions') as HTMLButtonElement;
+    const btnReset = document.getElementById('btn-reset') as HTMLButtonElement;
+    const shockText = document.getElementById('shock-text')!;
+
+    const scenarioShock = document.getElementById('scenario-shock') as HTMLButtonElement;
+    const scenarioNoShock = document.getElementById('scenario-noshock') as HTMLButtonElement;
+
+    let synth: SpeechSynthesis;
+    let desfibrilable = true;
+    let state: 'off' | 'on' | 'pads' | 'analyzing' | 'shock-ready' | 'shocked' | 'compressions' | 'no-shock' = 'off';
+
+    function speak(text: string): Promise<void> {
+      return new Promise((resolve) => {
+        if (!synth) synth = window.speechSynthesis;
+        synth.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'es-CL';
+        utter.rate = 0.9;
+        utter.pitch = 0.8;
+        utter.onend = () => resolve();
+        utter.onerror = () => resolve();
+        synth.speak(utter);
+      });
+    }
+
+    function beep(freq: number, duration: number, volume = 0.5) {
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(volume, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    }
+
+    function setScreen(text: string) {
+      screenText.textContent = text;
+    }
+
+    function setLed(color: string, label: string) {
+      led.className = `w-3 h-3 rounded-full transition-colors ${color}`;
+      ledLabel.textContent = label;
+    }
+
+    function disableAll() {
+      btnPower.disabled = true;
+      btnPads.disabled = true;
+      btnShock.disabled = true;
+      btnCompressions.disabled = true;
+    }
+
+    function enableOnly(...btns: HTMLButtonElement[]) {
+      disableAll();
+      btns.forEach(b => b.disabled = false);
+    }
+
+    // Scenario selection
+    scenarioShock.addEventListener('click', () => {
+      desfibrilable = true;
+      scenarioShock.className = 'flex-1 py-2 px-3 bg-andes-red text-white text-sm font-semibold rounded-xl';
+      scenarioNoShock.className = 'flex-1 py-2 px-3 bg-gray-200 text-gray-600 text-sm font-semibold rounded-xl';
+    });
+
+    scenarioNoShock.addEventListener('click', () => {
+      desfibrilable = false;
+      scenarioNoShock.className = 'flex-1 py-2 px-3 bg-andes-navy text-white text-sm font-semibold rounded-xl';
+      scenarioShock.className = 'flex-1 py-2 px-3 bg-gray-200 text-gray-600 text-sm font-semibold rounded-xl';
+    });
+
+    // POWER
+    btnPower.addEventListener('click', async () => {
+      if (state !== 'off') return;
+      state = 'on';
+      setLed('bg-green-400', 'ENCENDIDO');
+      beep(1000, 0.3);
+
+      setScreen('Encendiendo...');
+      await speak('DEA encendido. Siga las instrucciones.');
+
+      setScreen('Conecte los parches adhesivos al pecho desnudo del paciente.');
+      await speak('Conecte los parches adhesivos al pecho desnudo del paciente. Coloque un parche bajo la clavícula derecha y otro bajo la axila izquierda.');
+
+      enableOnly(btnPads);
+      btnReset.classList.remove('hidden');
+    });
+
+    // PADS CONNECTED
+    btnPads.addEventListener('click', async () => {
+      if (state !== 'on') return;
+      state = 'pads';
+      beep(800, 0.2);
+      beep(1000, 0.2);
+
+      setScreen('Parches detectados.\nNo toque al paciente.\nAnalizando ritmo cardíaco...');
+      await speak('Parches detectados. No toque al paciente. Analizando ritmo cardíaco.');
+
+      disableAll();
+      state = 'analyzing';
+
+      // Analysis animation
+      visualIndicator.classList.remove('hidden');
+      indicatorIcon.textContent = '📊';
+
+      for (let i = 0; i <= 100; i += 5) {
+        indicatorProgress.style.width = `${i}%`;
+        await new Promise(r => setTimeout(r, 150));
+      }
+
+      if (desfibrilable) {
+        // Shockable rhythm
+        state = 'shock-ready';
+        setLed('bg-red-500 animate-pulse', 'DESCARGA');
+        indicatorProgress.classList.remove('bg-green-400');
+        indicatorProgress.classList.add('bg-red-500');
+        indicatorIcon.textContent = '⚡';
+
+        setScreen('⚡ DESCARGA RECOMENDADA ⚡\n\nAléjese del paciente.\nPresione el botón de DESCARGA.');
+        await speak('Descarga recomendada. Aléjese del paciente. Presione el botón naranja de descarga.');
+
+        beep(600, 0.3);
+        setTimeout(() => beep(600, 0.3), 500);
+        setTimeout(() => beep(600, 0.3), 1000);
+
+        enableOnly(btnShock);
+        shockText.textContent = '⚡ DESCARGA ⚡';
+        btnShock.classList.add('animate-pulse');
+      } else {
+        // Non-shockable rhythm
+        state = 'no-shock';
+        indicatorIcon.textContent = '🫀';
+
+        setScreen('Descarga NO recomendada.\n\nInicie compresiones torácicas inmediatamente.\n30 compresiones, 2 ventilaciones.');
+        await speak('Descarga no recomendada. Inicie compresiones torácicas inmediatamente. 30 compresiones, 2 ventilaciones.');
+
+        enableOnly(btnCompressions);
+      }
+    });
+
+    // SHOCK
+    btnShock.addEventListener('click', async () => {
+      if (state !== 'shock-ready') return;
+      state = 'shocked';
+      btnShock.classList.remove('animate-pulse');
+      disableAll();
+
+      // Flash effect
+      const device = document.getElementById('dea-device')!;
+      device.classList.add('animate-shock');
+      beep(200, 0.5, 1);
+
+      setScreen('⚡ DESCARGA ADMINISTRADA ⚡');
+      await speak('Descarga administrada.');
+
+      device.classList.remove('animate-shock');
+
+      await new Promise(r => setTimeout(r, 1000));
+
+      setScreen('Descarga completada.\n\nInicie compresiones torácicas inmediatamente.\n30 compresiones, 2 ventilaciones.');
+      await speak('Inicie compresiones torácicas inmediatamente. 30 compresiones, 2 ventilaciones.');
+
+      setLed('bg-green-400', 'COMPRESIONES');
+      enableOnly(btnCompressions);
+    });
+
+    // COMPRESSIONS
+    btnCompressions.addEventListener('click', () => {
+      window.location.href = '/metronomo';
+    });
+
+    // RESET
+    btnReset.addEventListener('click', () => {
+      state = 'off';
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      setScreen('Presione el botón de encendido para comenzar');
+      setLed('bg-gray-600', 'APAGADO');
+      visualIndicator.classList.add('hidden');
+      indicatorProgress.style.width = '0%';
+      indicatorProgress.classList.add('bg-green-400');
+      indicatorProgress.classList.remove('bg-red-500');
+      btnShock.classList.remove('animate-pulse');
+      shockText.textContent = 'DESCARGA';
+      enableOnly(btnPower);
+      btnReset.classList.add('hidden');
+    });
+
+    // Initial state
+    enableOnly(btnPower);
+  </script>
+</Layout>

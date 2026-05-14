@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-white text-andes-dark font-sans antialiased;
+    overscroll-behavior: none;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-andes-red text-white font-semibold py-4 px-6 rounded-2xl
+           active:scale-95 transition-transform duration-150
+           shadow-lg shadow-andes-red/25 text-lg w-full text-center block;
+  }
+
+  .btn-secondary {
+    @apply bg-andes-navy text-white font-semibold py-4 px-6 rounded-2xl
+           active:scale-95 transition-transform duration-150
+           shadow-lg shadow-andes-navy/25 text-lg w-full text-center block;
+  }
+
+  .card {
+    @apply bg-white rounded-3xl p-6 shadow-md border border-gray-100;
+  }
+
+  .step-number {
+    @apply w-10 h-10 rounded-full bg-andes-red text-white font-bold
+           flex items-center justify-center text-lg flex-shrink-0;
+  }
+
+  .nav-back {
+    @apply flex items-center gap-2 text-andes-navy font-medium py-3;
+  }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 0.4; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 0.5s ease-in-out infinite;
+}
+
+@keyframes shock-flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-shock {
+  animation: shock-flash 0.1s ease-in-out 6;
+}

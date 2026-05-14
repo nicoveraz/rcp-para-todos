@@ -1,0 +1,93 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const pasos = [
+  {
+    titulo: 'Seguridad de la escena',
+    descripcion: 'Asegura que el entorno sea seguro para ti y la persona afectada. Usa guantes si están disponibles.',
+    icono: '🛡️',
+    detalle: 'Observa el entorno: tráfico, electricidad, gases. No te conviertas en otra víctima.',
+  },
+  {
+    titulo: 'Comprobar respuesta',
+    descripcion: '¿Señor/a, está bien? Toca los hombros firmemente y habla fuerte.',
+    icono: '👋',
+    detalle: 'Estimula ambos hombros. Si no responde, pide ayuda inmediatamente.',
+  },
+  {
+    titulo: 'Llamar al 131',
+    descripcion: 'Si no responde, pide a alguien que llame al 131 y traiga un DEA si hay uno disponible.',
+    icono: '📞',
+    detalle: 'Si estás solo, llama tú con altavoz. Activa el protocolo de emergencia.',
+  },
+  {
+    titulo: 'Evaluar respiración',
+    descripcion: 'Evalúa si la persona respira normalmente durante no más de 10 segundos.',
+    icono: '👁️',
+    detalle: 'Mira el pecho (¿sube y baja?), escucha y siente. Los jadeos (gasping) NO son respiración normal.',
+  },
+  {
+    titulo: 'Compresiones torácicas',
+    descripcion: 'Si no tiene pulso y no respira: coloca tus manos en el centro del pecho e inicia compresiones.',
+    icono: '🫁',
+    detalle: '30 compresiones seguidas de 2 ventilaciones. Profundidad: 5-6 cm. Ritmo: 100-120/min. Permite que el pecho se re-expanda completamente.',
+  },
+  {
+    titulo: 'Usar el DEA',
+    descripcion: 'Enciende el DEA y sigue sus instrucciones de voz. Coloca los parches según las indicaciones.',
+    icono: '⚡',
+    detalle: 'No detengas las compresiones mientras colocan los parches. Solo detente cuando el DEA lo indique.',
+  },
+];
+---
+
+<Layout title="Guía RCP - Paso a Paso">
+  <main class="min-h-dvh px-5 py-6 max-w-md mx-auto">
+    <a href="/" class="nav-back">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Volver
+    </a>
+
+    <h1 class="text-2xl font-extrabold text-andes-navy mt-2 mb-2">Guía RCP</h1>
+    <p class="text-sm text-gray-500 mb-6">Adultos — 6 pasos para salvar una vida</p>
+
+    <div class="space-y-4">
+      {pasos.map((paso, i) => (
+        <details class="card group" id={`paso-${i + 1}`}>
+          <summary class="flex items-start gap-4 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+            <div class="step-number">{i + 1}</div>
+            <div class="flex-1">
+              <h2 class="font-bold text-andes-navy">{paso.titulo}</h2>
+              <p class="text-sm text-gray-600 mt-1">{paso.descripcion}</p>
+            </div>
+            <span class="text-2xl mt-1">{paso.icono}</span>
+          </summary>
+          <div class="mt-4 pt-4 border-t border-gray-100 ml-14">
+            <p class="text-sm text-gray-700 leading-relaxed">{paso.detalle}</p>
+            {i === 4 && (
+              <a href="/metronomo" class="inline-flex items-center gap-2 mt-3 text-sm font-semibold text-andes-red">
+                Abrir metrónomo →
+              </a>
+            )}
+            {i === 5 && (
+              <a href="/simulador-dea" class="inline-flex items-center gap-2 mt-3 text-sm font-semibold text-andes-red">
+                Practicar con simulador DEA →
+              </a>
+            )}
+          </div>
+        </details>
+      ))}
+    </div>
+
+    <div class="mt-8 p-4 bg-andes-red/5 rounded-2xl border border-andes-red/10">
+      <p class="text-sm font-bold text-andes-red text-center">
+        ⚡ ACTUAR RÁPIDO PUEDE MARCAR LA DIFERENCIA
+      </p>
+      <p class="text-xs text-gray-500 text-center mt-1">
+        Cada minuto sin RCP reduce la sobrevida un 10%
+      </p>
+    </div>
+  </main>
+</Layout>

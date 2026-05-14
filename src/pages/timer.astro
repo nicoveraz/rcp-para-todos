@@ -1,0 +1,231 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Timer de Práctica">
+  <main class="min-h-dvh px-5 py-6 max-w-md mx-auto flex flex-col">
+    <a href="/" class="nav-back">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Volver
+    </a>
+
+    <h1 class="text-2xl font-extrabold text-andes-navy mt-2 mb-2">Timer de Práctica</h1>
+    <p class="text-sm text-gray-500 mb-6">Cronómetro para simulación con robot</p>
+
+    <div class="flex-1 flex flex-col items-center justify-center gap-8">
+      <!-- Timer display -->
+      <div class="relative">
+        <svg class="w-64 h-64" viewBox="0 0 200 200">
+          <circle cx="100" cy="100" r="90" fill="none" stroke="#E5E7EB" stroke-width="6"/>
+          <circle
+            id="timer-ring"
+            cx="100" cy="100" r="90"
+            fill="none"
+            stroke="#1B3A5C"
+            stroke-width="6"
+            stroke-linecap="round"
+            stroke-dasharray="565.49"
+            stroke-dashoffset="0"
+            transform="rotate(-90 100 100)"
+            class="transition-all duration-1000"
+          />
+        </svg>
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <div id="timer-display" class="text-5xl font-extrabold text-andes-navy tabular-nums">2:00</div>
+          <p id="timer-label" class="text-sm text-gray-500 mt-1">Listo para iniciar</p>
+        </div>
+      </div>
+
+      <!-- Duration presets -->
+      <div class="flex gap-3 w-full">
+        <button data-duration="60" class="duration-btn flex-1 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl text-sm">
+          1 min
+        </button>
+        <button data-duration="120" class="duration-btn flex-1 py-3 bg-andes-navy text-white font-semibold rounded-xl text-sm">
+          2 min
+        </button>
+        <button data-duration="180" class="duration-btn flex-1 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl text-sm">
+          3 min
+        </button>
+        <button data-duration="300" class="duration-btn flex-1 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl text-sm">
+          5 min
+        </button>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex gap-4 w-full">
+        <button
+          id="btn-start"
+          class="flex-1 py-4 bg-andes-red text-white font-bold rounded-2xl text-lg
+                 shadow-lg shadow-andes-red/25 active:scale-95 transition-transform"
+        >
+          INICIAR
+        </button>
+        <button
+          id="btn-stop"
+          class="w-16 py-4 bg-gray-200 text-gray-600 font-bold rounded-2xl text-lg
+                 active:scale-95 transition-transform"
+        >
+          ↺
+        </button>
+      </div>
+
+      <!-- Round counter -->
+      <div class="w-full p-4 bg-gray-50 rounded-2xl">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs text-gray-500 font-medium">RONDAS COMPLETADAS</p>
+            <p id="round-count" class="text-3xl font-extrabold text-andes-navy">0</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500 font-medium">TIEMPO TOTAL</p>
+            <p id="total-time" class="text-3xl font-extrabold text-andes-navy">0:00</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const timerDisplay = document.getElementById('timer-display')!;
+    const timerLabel = document.getElementById('timer-label')!;
+    const timerRing = document.getElementById('timer-ring')!;
+    const btnStart = document.getElementById('btn-start') as HTMLButtonElement;
+    const btnStop = document.getElementById('btn-stop') as HTMLButtonElement;
+    const roundCount = document.getElementById('round-count')!;
+    const totalTime = document.getElementById('total-time')!;
+    const durationBtns = document.querySelectorAll('.duration-btn');
+
+    let duration = 120;
+    let remaining = 120;
+    let isRunning = false;
+    let intervalId: number | null = null;
+    let rounds = 0;
+    let totalSeconds = 0;
+    let totalIntervalId: number | null = null;
+    const circumference = 2 * Math.PI * 90;
+
+    function formatTime(s: number): string {
+      const m = Math.floor(s / 60);
+      const sec = s % 60;
+      return `${m}:${sec.toString().padStart(2, '0')}`;
+    }
+
+    function updateDisplay() {
+      timerDisplay.textContent = formatTime(remaining);
+      const progress = 1 - remaining / duration;
+      timerRing.setAttribute('stroke-dashoffset', String(circumference * (1 - progress)));
+
+      if (remaining <= 10 && remaining > 0 && isRunning) {
+        timerRing.setAttribute('stroke', '#E63946');
+        timerDisplay.classList.add('text-andes-red');
+        timerDisplay.classList.remove('text-andes-navy');
+      } else {
+        timerRing.setAttribute('stroke', '#1B3A5C');
+        timerDisplay.classList.remove('text-andes-red');
+        timerDisplay.classList.add('text-andes-navy');
+      }
+    }
+
+    function beep(freq: number, dur: number) {
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.5, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + dur);
+      osc.start();
+      osc.stop(ctx.currentTime + dur);
+    }
+
+    function tick() {
+      remaining--;
+      updateDisplay();
+
+      if (remaining <= 5 && remaining > 0) {
+        beep(800, 0.1);
+      }
+
+      if (remaining <= 0) {
+        // Round complete
+        beep(1200, 0.5);
+        setTimeout(() => beep(1200, 0.5), 600);
+        setTimeout(() => beep(1200, 0.5), 1200);
+
+        rounds++;
+        roundCount.textContent = String(rounds);
+        timerLabel.textContent = `¡Ronda ${rounds} completada!`;
+
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 200]);
+
+        stop();
+        remaining = duration;
+        updateDisplay();
+      }
+    }
+
+    function start() {
+      if (isRunning) {
+        // Pause
+        isRunning = false;
+        if (intervalId) clearInterval(intervalId);
+        if (totalIntervalId) clearInterval(totalIntervalId);
+        btnStart.textContent = 'CONTINUAR';
+        timerLabel.textContent = 'Pausado';
+        return;
+      }
+
+      isRunning = true;
+      btnStart.textContent = 'PAUSA';
+      timerLabel.textContent = 'Compresiones en curso...';
+      intervalId = window.setInterval(tick, 1000);
+      totalIntervalId = window.setInterval(() => {
+        totalSeconds++;
+        totalTime.textContent = formatTime(totalSeconds);
+      }, 1000);
+    }
+
+    function stop() {
+      isRunning = false;
+      if (intervalId) clearInterval(intervalId);
+      if (totalIntervalId) clearInterval(totalIntervalId);
+      btnStart.textContent = 'INICIAR';
+      remaining = duration;
+      updateDisplay();
+    }
+
+    btnStart.addEventListener('click', start);
+
+    btnStop.addEventListener('click', () => {
+      stop();
+      rounds = 0;
+      totalSeconds = 0;
+      roundCount.textContent = '0';
+      totalTime.textContent = '0:00';
+      timerLabel.textContent = 'Listo para iniciar';
+    });
+
+    durationBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const dur = parseInt((btn as HTMLButtonElement).dataset.duration || '120');
+        duration = dur;
+        remaining = dur;
+
+        durationBtns.forEach(b => {
+          (b as HTMLElement).className = 'duration-btn flex-1 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl text-sm';
+        });
+        (btn as HTMLElement).className = 'duration-btn flex-1 py-3 bg-andes-navy text-white font-semibold rounded-xl text-sm';
+
+        if (isRunning) stop();
+        updateDisplay();
+        timerLabel.textContent = 'Listo para iniciar';
+      });
+    });
+
+    updateDisplay();
+  </script>
+</Layout>

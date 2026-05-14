@@ -1,0 +1,16 @@
+{
+  "name": "RCP para Tod@s - Andes Salud",
+  "short_name": "RCP",
+  "description": "Guía interactiva de RCP básico y uso de DEA",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1B3A5C",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
