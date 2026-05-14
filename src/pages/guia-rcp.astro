@@ -35,7 +35,7 @@ const pasos = [
   {
     titulo: 'Compresiones torácicas',
     descripcion: 'Si no tiene pulso y no respira: coloca tus manos en el centro del pecho e inicia compresiones.',
-    detalle: '30 compresiones seguidas de 2 ventilaciones. Profundidad: 5-6 cm. Ritmo: 100-120/min. Permite que el pecho se re-expanda completamente.',
+    detalle: '',
   },
   {
     titulo: 'Usar el DEA',
@@ -69,8 +69,30 @@ const pasos = [
             <span class="mt-1" set:html={iconos[i]} />
           </summary>
           <div class="mt-4 pt-4 border-t border-gray-100 ml-14">
-            <p class="text-sm text-gray-700 leading-relaxed">{paso.detalle}</p>
+            {paso.detalle && <p class="text-sm text-gray-700 leading-relaxed">{paso.detalle}</p>}
             {i === 4 && (
+              <div class="space-y-2 mt-1">
+                <div class="flex items-start gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-andes-red flex-shrink-0 mt-0.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  <p class="text-sm text-gray-700"><strong class="text-andes-navy">Frecuencia:</strong> 100–120/min (ideal 110)</p>
+                </div>
+                <div class="flex items-start gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-andes-red flex-shrink-0 mt-0.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  <p class="text-sm text-gray-700"><strong class="text-andes-navy">Profundidad:</strong> 5 a 6 cm — comprime fuerte</p>
+                </div>
+                <div class="flex items-start gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-andes-red flex-shrink-0 mt-0.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  <p class="text-sm text-gray-700"><strong class="text-andes-navy">Ubicación:</strong> centro del pecho, manos entrelazadas, brazos rectos</p>
+                </div>
+                <div class="flex items-start gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-andes-red flex-shrink-0 mt-0.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  <p class="text-sm text-gray-700"><strong class="text-andes-navy">Re-expansión:</strong> deja que el pecho vuelva a subir entre compresiones</p>
+                </div>
+                <div class="flex items-start gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-andes-red flex-shrink-0 mt-0.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  <p class="text-sm text-gray-700"><strong class="text-andes-navy">No pares:</strong> minimiza interrupciones, rota cada 2 min si es posible</p>
+                </div>
+              </div>
               <a href={`${base}metronomo`} class="inline-flex items-center gap-2 mt-3 text-sm font-semibold text-andes-red">
                 Abrir metrónomo →
               </a>

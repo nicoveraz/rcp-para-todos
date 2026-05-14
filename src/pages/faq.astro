@@ -1,0 +1,65 @@
+---
+import Layout from '../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL;
+
+const preguntas = [
+  {
+    pregunta: '¿Debo dar ventilaciones (respiración boca a boca)?',
+    respuesta: '<strong>Si no estás capacitado en ventilaciones, realiza solo compresiones.</strong> Las compresiones continuas sin ventilaciones son efectivas y recomendadas para reanimadores no profesionales de salud (guías AHA 2025).<br><br>Lo más importante es no dejar de comprimir. Las compresiones mantienen la circulación de sangre oxigenada al cerebro y los órganos vitales.',
+  },
+  {
+    pregunta: '¿Puedo hacer daño con el DEA?',
+    respuesta: '<strong>No.</strong> El DEA analiza el ritmo cardíaco y solo permite la descarga si detecta un ritmo que lo requiere. Si el ritmo no es desfibrilable, el botón no tendrá efecto. Es un equipo diseñado para ser usado por cualquier persona.',
+  },
+  {
+    pregunta: '¿Cuándo dejo de hacer compresiones?',
+    respuesta: 'Detén las compresiones solo cuando: la persona comience a respirar normalmente, llegue el equipo de emergencia y te releve, el DEA indique que analiza el ritmo, o estés físicamente agotado y no puedas continuar.',
+  },
+  {
+    pregunta: '¿Puedo hacer daño al comprimir el pecho?',
+    respuesta: 'Es posible que se fracturen costillas durante las compresiones, pero <strong>esto no debe detenerte</strong>. Una fractura costal es un daño menor comparado con la muerte por paro cardíaco. La persona no sobrevivirá sin compresiones.',
+  },
+  {
+    pregunta: '¿Qué hago si la persona vomita?',
+    respuesta: 'Gira a la persona de costado para que el vómito salga de la boca y no obstruya la vía aérea. Limpia lo que puedas y vuelve a posicionarla boca arriba para continuar las compresiones.',
+  },
+  {
+    pregunta: '¿Puedo usar el DEA en una persona mojada?',
+    respuesta: 'Debes <strong>secar el pecho</strong> antes de colocar los parches. Si la persona está en agua, retírala primero. Los parches deben adherirse bien a la piel seca para funcionar correctamente.',
+  },
+];
+---
+
+<Layout title="Preguntas Frecuentes - RCP">
+  <main class="min-h-dvh px-5 py-6 max-w-md mx-auto">
+    <a href={base} class="nav-back">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Volver
+    </a>
+
+    <h1 class="text-2xl font-extrabold text-andes-navy mt-2 mb-2">Preguntas Frecuentes</h1>
+    <p class="text-sm text-gray-500 mb-6">Dudas comunes sobre RCP y uso de DEA</p>
+
+    <div class="space-y-3">
+      {preguntas.map((item) => (
+        <details class="card group">
+          <summary class="flex items-start gap-3 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+            <span class="font-bold text-andes-navy text-sm flex-1">{item.pregunta}</span>
+            <svg class="w-5 h-5 text-gray-400 flex-shrink-0 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </summary>
+          <div class="mt-3 pt-3 border-t border-gray-100">
+            <p class="text-sm text-gray-700 leading-relaxed" set:html={item.respuesta} />
+          </div>
+        </details>
+      ))}
+    </div>
+
+    <div class="mt-8 p-4 bg-andes-red/5 rounded-2xl border border-andes-red/10">
+      <p class="text-sm font-bold text-andes-red text-center">
+        ¿Tienes otra duda? Consulta con tu instructor durante el taller.
+      </p>
+    </div>
+  </main>
+</Layout>
