@@ -4,6 +4,26 @@ Todos los cambios relevantes de este proyecto se documentan aquí.
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [0.2.0] - 2026-05-14
+
+### Agregado
+
+- Splash screen con términos y condiciones al primer ingreso
+- Sección de características de compresiones en Guía RCP (paso 5) y Guía DEA
+- Página de Preguntas Frecuentes con 6 preguntas sobre RCP y DEA
+- Botón FAQ en menú principal
+- Página combinada "Herramientas de Práctica" con tabs Metrónomo / Timer
+
+### Cambiado
+
+- Metrónomo y Timer unificados en una sola página con tabs
+- Guía DEA paso 6: frecuencia de compresiones actualizada a 110/min
+- FAQ movido de Guía DEA a página independiente
+
+### Eliminado
+
+- Páginas individuales /metronomo y /timer (reemplazadas por /herramientas)
+
 ## [0.1.0] - 2026-05-14
 
 ### Agregado
