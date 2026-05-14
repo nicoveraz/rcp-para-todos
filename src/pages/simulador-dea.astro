@@ -279,8 +279,8 @@ const base = import.meta.env.BASE_URL;
         state = 'no-shock';
         indicatorIcon.textContent = '🫀';
 
-        setScreen('Descarga NO recomendada.\n\nInicie compresiones torácicas inmediatamente.\n30 compresiones, 2 ventilaciones.');
-        await speak('Descarga no recomendada. Inicie compresiones torácicas inmediatamente. 30 compresiones, 2 ventilaciones.');
+        setScreen('Descarga NO recomendada.\n\nInicie compresiones torácicas inmediatamente.');
+        await speak('Descarga no recomendada. Inicie compresiones torácicas inmediatamente.');
 
         enableOnly(btnCompressions);
       }
@@ -305,8 +305,8 @@ const base = import.meta.env.BASE_URL;
 
       await new Promise(r => setTimeout(r, 1000));
 
-      setScreen('Descarga completada.\n\nInicie compresiones torácicas inmediatamente.\n30 compresiones, 2 ventilaciones.');
-      await speak('Inicie compresiones torácicas inmediatamente. 30 compresiones, 2 ventilaciones.');
+      setScreen('Descarga completada.\n\nInicie compresiones torácicas inmediatamente.');
+      await speak('Inicie compresiones torácicas inmediatamente.');
 
       setLed('bg-green-400', 'COMPRESIONES');
       enableOnly(btnCompressions);
@@ -314,7 +314,7 @@ const base = import.meta.env.BASE_URL;
 
     // COMPRESSIONS
     btnCompressions.addEventListener('click', () => {
-      window.location.href = btnCompressions.dataset.metronomoUrl || '/metronomo';
+      window.location.href = btnCompressions.dataset.metronomoUrl;
     });
 
     // RESET
