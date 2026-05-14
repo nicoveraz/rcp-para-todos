@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL;
 
 const pasos = [
   {
@@ -43,7 +44,7 @@ const pasos = [
 
 <Layout title="Guía RCP - Paso a Paso">
   <main class="min-h-dvh px-5 py-6 max-w-md mx-auto">
-    <a href="/" class="nav-back">
+    <a href={base} class="nav-back">
       <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
@@ -67,12 +68,12 @@ const pasos = [
           <div class="mt-4 pt-4 border-t border-gray-100 ml-14">
             <p class="text-sm text-gray-700 leading-relaxed">{paso.detalle}</p>
             {i === 4 && (
-              <a href="/metronomo" class="inline-flex items-center gap-2 mt-3 text-sm font-semibold text-andes-red">
+              <a href={`${base}metronomo`} class="inline-flex items-center gap-2 mt-3 text-sm font-semibold text-andes-red">
                 Abrir metrónomo →
               </a>
             )}
             {i === 5 && (
-              <a href="/simulador-dea" class="inline-flex items-center gap-2 mt-3 text-sm font-semibold text-andes-red">
+              <a href={`${base}simulador-dea`} class="inline-flex items-center gap-2 mt-3 text-sm font-semibold text-andes-red">
                 Practicar con simulador DEA →
               </a>
             )}

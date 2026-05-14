@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL;
 
 const pasos = [
   {
@@ -43,7 +44,7 @@ const pasos = [
 
 <Layout title="Guía Uso DEA">
   <main class="min-h-dvh px-5 py-6 max-w-md mx-auto">
-    <a href="/" class="nav-back">
+    <a href={base} class="nav-back">
       <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
@@ -79,7 +80,7 @@ const pasos = [
     </div>
 
     <div class="mt-8">
-      <a href="/simulador-dea" class="btn-primary flex items-center justify-center gap-2">
+      <a href={`${base}simulador-dea`} class="btn-primary flex items-center justify-center gap-2">
         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
