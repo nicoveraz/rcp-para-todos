@@ -2,41 +2,44 @@
 import Layout from '../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL;
 
+const iconos = [
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-andes-navy"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>',
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-andes-navy"><path d="M2 21h19v-3H2v3zM20.49 3.51c-.56-.56-1.46-.56-2.02 0L14 8H2v7h12l4.47-4.47 2.02-2.02c.56-.56.56-1.46 0-2z"/><path d="M17.5 4.5c.28.28.28.73 0 1.01L15 8H9l4.49-4.49c.28-.28.73-.28 1.01 0l3 1z" fill="none"/></svg>',
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-andes-red"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>',
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-andes-navy"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>',
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-andes-red"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-amber-500"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>',
+];
+
 const pasos = [
   {
     titulo: 'Seguridad de la escena',
     descripcion: 'Asegura que el entorno sea seguro para ti y la persona afectada. Usa guantes si están disponibles.',
-    icono: '🛡️',
     detalle: 'Observa el entorno: tráfico, electricidad, gases. No te conviertas en otra víctima.',
   },
   {
     titulo: 'Comprobar respuesta',
     descripcion: '¿Señor/a, está bien? Toca los hombros firmemente y habla fuerte.',
-    icono: '👋',
     detalle: 'Estimula ambos hombros. Si no responde, pide ayuda inmediatamente.',
   },
   {
     titulo: 'Llamar al 131',
     descripcion: 'Si no responde, pide a alguien que llame al 131 y traiga un DEA si hay uno disponible.',
-    icono: '📞',
     detalle: 'Si estás solo, llama tú con altavoz. Activa el protocolo de emergencia.',
   },
   {
     titulo: 'Evaluar respiración',
     descripcion: 'Evalúa si la persona respira normalmente durante no más de 10 segundos.',
-    icono: '👁️',
     detalle: 'Mira el pecho (¿sube y baja?), escucha y siente. Los jadeos (gasping) NO son respiración normal.',
   },
   {
     titulo: 'Compresiones torácicas',
     descripcion: 'Si no tiene pulso y no respira: coloca tus manos en el centro del pecho e inicia compresiones.',
-    icono: '🫁',
     detalle: '30 compresiones seguidas de 2 ventilaciones. Profundidad: 5-6 cm. Ritmo: 100-120/min. Permite que el pecho se re-expanda completamente.',
   },
   {
     titulo: 'Usar el DEA',
     descripcion: 'Enciende el DEA y sigue sus instrucciones de voz. Coloca los parches según las indicaciones.',
-    icono: '⚡',
     detalle: 'No detengas las compresiones mientras colocan los parches. Solo detente cuando el DEA lo indique.',
   },
 ];
@@ -63,7 +66,7 @@ const pasos = [
               <h2 class="font-bold text-andes-navy">{paso.titulo}</h2>
               <p class="text-sm text-gray-600 mt-1">{paso.descripcion}</p>
             </div>
-            <span class="text-2xl mt-1">{paso.icono}</span>
+            <span class="mt-1" set:html={iconos[i]} />
           </summary>
           <div class="mt-4 pt-4 border-t border-gray-100 ml-14">
             <p class="text-sm text-gray-700 leading-relaxed">{paso.detalle}</p>

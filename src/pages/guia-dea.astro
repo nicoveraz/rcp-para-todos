@@ -2,41 +2,44 @@
 import Layout from '../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL;
 
+const iconosDea = [
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-amber-600"><path d="M16 7V3H8v4H2v13h20V7h-6zm-6-2h4v2h-4V5zM9 17v-1H7v-2h2v-1h2v1h2v2h-2v1H9z"/></svg>',
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-amber-600"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-amber-600"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>',
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-amber-600"><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5zM19 19.09H5V4.91h14v14.18zM6 15h12v2H6zm0-4h12v2H6zm0-4h12v2H6z"/></svg>',
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-amber-600"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>',
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-amber-600"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>',
+];
+
 const pasos = [
   {
     titulo: 'Encender el DEA',
     descripcion: 'Presiona el botón de encendido. El equipo comenzará a dar instrucciones de voz.',
-    icono: '🔋',
     tip: 'Los DEA modernos se activan al abrir la tapa. Escucha atentamente las instrucciones.',
   },
   {
     titulo: 'Preparar al paciente',
     descripcion: 'Descubre el pecho del paciente. Si está mojado, seca la zona. Retira parches médicos si los tiene.',
-    icono: '👕',
     tip: 'Si tiene mucho vello, afeita la zona donde irán los parches para mejor adherencia.',
   },
   {
     titulo: 'Colocar los parches',
     descripcion: 'Coloca un parche bajo la clavícula derecha y otro bajo la axila izquierda. Sigue el diagrama del parche.',
-    icono: '📋',
     tip: 'Los parches tienen un diagrama impreso. Asegúrate de que estén bien adheridos sin arrugas ni burbujas.',
   },
   {
     titulo: 'Análisis del ritmo',
     descripcion: 'El DEA analizará el ritmo cardíaco. NO toques al paciente durante el análisis.',
-    icono: '📊',
     tip: '¡Todos atrás! Cualquier movimiento puede interferir con el análisis. Avisa a todos que se alejen.',
   },
   {
     titulo: 'Descarga (si indicada)',
     descripcion: 'Si el DEA indica descarga: asegúrate de que nadie toque al paciente y presiona el botón de descarga.',
-    icono: '⚡',
     tip: 'Grita "¡TODOS ATRÁS!" antes de presionar. El DEA solo recomienda descarga si detecta un ritmo desfibrilable.',
   },
   {
     titulo: 'Reiniciar compresiones',
     descripcion: 'Inmediatamente después de la descarga (o si no se indica), reinicia compresiones 30:2 por 2 minutos.',
-    icono: '🔄',
     tip: 'El DEA re-analizará automáticamente cada 2 minutos. No retires los parches.',
   },
 ];
@@ -70,10 +73,10 @@ const pasos = [
               <h2 class="font-bold text-andes-navy">{paso.titulo}</h2>
               <p class="text-sm text-gray-600 mt-1">{paso.descripcion}</p>
             </div>
-            <span class="text-2xl mt-1">{paso.icono}</span>
+            <span class="mt-1" set:html={iconosDea[i]} />
           </summary>
           <div class="mt-4 pt-4 border-t border-gray-100 ml-14">
-            <p class="text-sm text-gray-700 leading-relaxed">💡 <strong>Tip:</strong> {paso.tip}</p>
+            <p class="text-sm text-gray-700 leading-relaxed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-amber-500 inline-block mr-1 -mt-0.5"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg> <strong>Tip:</strong> {paso.tip}</p>
           </div>
         </details>
       ))}
