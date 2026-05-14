@@ -155,6 +155,19 @@ const base = import.meta.env.BASE_URL;
     const panelMetro = document.getElementById('panel-metronomo')!;
     const panelTimer = document.getElementById('panel-timer')!;
 
+    let metroPlaying = false;
+    let timerRunning = false;
+
+    function updateTabIndicators() {
+      const metroActive = tabMetro.classList.contains('bg-white');
+      const timerActive = tabTimer.classList.contains('bg-white');
+
+      const metroDot = metroPlaying && !metroActive ? ' ●' : '';
+      const timerDot = timerRunning && !timerActive ? ' ●' : '';
+      tabMetro.textContent = `Metrónomo${metroDot}`;
+      tabTimer.textContent = `Timer${timerDot}`;
+    }
+
     function showTab(tab: 'metronomo' | 'timer') {
       const activeClass = 'bg-white text-andes-navy shadow-sm';
       const inactiveClass = 'text-gray-500';
@@ -166,7 +179,6 @@ const base = import.meta.env.BASE_URL;
         panelTimer.classList.remove('flex');
         tabMetro.className = `flex-1 py-2.5 text-sm font-bold rounded-lg ${activeClass} transition-all`;
         tabTimer.className = `flex-1 py-2.5 text-sm font-bold rounded-lg ${inactiveClass} transition-all`;
-        stopTimer();
       } else {
         panelTimer.classList.remove('hidden');
         panelTimer.classList.add('flex');
@@ -174,8 +186,8 @@ const base = import.meta.env.BASE_URL;
         panelMetro.classList.remove('flex');
         tabTimer.className = `flex-1 py-2.5 text-sm font-bold rounded-lg ${activeClass} transition-all`;
         tabMetro.className = `flex-1 py-2.5 text-sm font-bold rounded-lg ${inactiveClass} transition-all`;
-        stopMetronome();
       }
+      updateTabIndicators();
     }
 
     tabMetro.addEventListener('click', () => showTab('metronomo'));
@@ -196,7 +208,6 @@ const base = import.meta.env.BASE_URL;
     const cycleText = document.getElementById('cycle-text')!;
     const cycleBar = document.getElementById('cycle-bar')!;
 
-    let metroPlaying = false;
     let metroInterval: number | null = null;
     let audioCtx: AudioContext | null = null;
     let metroCount = 0;
@@ -256,6 +267,7 @@ const base = import.meta.env.BASE_URL;
       const ms = Math.round(60000 / bpm);
       metroTick();
       metroInterval = window.setInterval(metroTick, ms);
+      updateTabIndicators();
     }
 
     function stopMetronome() {
@@ -266,6 +278,7 @@ const base = import.meta.env.BASE_URL;
       pulseRing.classList.add('hidden');
       if (metroInterval) clearInterval(metroInterval);
       metroInterval = null;
+      updateTabIndicators();
     }
 
     pulseBtn.addEventListener('click', () => {
@@ -298,7 +311,6 @@ const base = import.meta.env.BASE_URL;
 
     let duration = 120;
     let remaining = 120;
-    let timerRunning = false;
     let isPausing = false;
     let pauseRemaining = 10;
     let timerInterval: number | null = null;
@@ -402,6 +414,7 @@ const base = import.meta.env.BASE_URL;
         if (totalIntervalId) clearInterval(totalIntervalId);
         btnStart.textContent = 'CONTINUAR';
         timerLabel.textContent = 'Pausado';
+        updateTabIndicators();
         return;
       }
       timerRunning = true;
@@ -412,6 +425,7 @@ const base = import.meta.env.BASE_URL;
         totalSeconds++;
         totalTime.textContent = formatTime(totalSeconds);
       }, 1000);
+      updateTabIndicators();
     }
 
     function stopTimer() {
@@ -424,6 +438,7 @@ const base = import.meta.env.BASE_URL;
       btnStart.textContent = 'INICIAR';
       remaining = duration;
       updateTimerDisplay();
+      updateTabIndicators();
     }
 
     btnStart.addEventListener('click', startTimer);
